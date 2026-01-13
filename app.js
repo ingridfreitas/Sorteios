@@ -41,10 +41,18 @@ inputFile.addEventListener("change", function (event) {
     const reader = new FileReader();
     reader.onload = function (e) {
         const buffer = e.target.result;
+        let textoFormat;
 
-        const decoder = new TextDecoder("iso-8859-1");
-        const texto = decoder.decode(buffer);
-        processarCSV(texto);
+        try {
+            // 🔹 tenta UTF-8 primeiro
+            textoFormat = new TextDecoder("utf-8").decode(buffer);
+        } catch {
+            // 🔹 fallback para Excel ANSI
+            textoFormat = new TextDecoder("iso-8859-1").decode(buffer);
+        }
+
+        textoFormat = textoFormat.replace(/^\uFEFF/, "").replace(/\r/g, "");
+        processarCSV(textoFormat);
     };
 
     reader.readAsArrayBuffer(file, "UTF-8");
