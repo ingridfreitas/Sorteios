@@ -1,0 +1,6 @@
+{"assets/casamoretto.png", "white"},
+    {"assets/centerpsyclin.png", "offw"},
+    {"assets/patmos.jpg", "cinza"},
+    {"assets/paulotransportes.png", "white"},
+    {"assets/visiosho.png", "blueh"},
+    {"assets/zag.jpg", "pink"}

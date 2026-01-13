@@ -1,0 +1,420 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+:root {
+    --color-primary: #080522;
+    --blue-secondary: #5098af;
+    --color-secondary: #fff9eb;
+    --color-tertiary: #f00;
+    --color-tertiary-hover: #a10000;
+    --color-button: #c9621f;
+    --color-button-hover: #904716;
+    --color-text: #444444;
+    --color-white: #ffffff;
+}
+
+/* Estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    background-color: var(--color-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.drax {
+    display: none;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+/* Banner */
+.header-banner {
+    flex: 40%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 3rem 0;
+}
+
+.logo {
+    height: 12rem;
+}
+
+/* Seção de entrada */
+.input-section {
+    flex: 60%;
+    background-color: var(--color-secondary);
+    border: 1px solid #000;
+    border-radius: 64px 64px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+}
+
+/* Títulos */
+.main-title {
+    font-size: 3.5rem;
+    font-family: "Merriweather", serif;
+    font-weight: 900;
+    font-style: italic;
+    color: var(--color-white);
+}
+
+.section-title {
+    font-family: "Inter", serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 10px 0;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 2rem;
+    margin-top: 4rem;
+}
+
+/* Contêineres de entrada e botão */
+.input-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+}
+
+.listaParticipantes {
+    margin: 0;
+}
+
+.input-name {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: 2px solid #000;
+    border-radius: 1.2rem 0 0 1.2rem;
+    font-size: 1.2rem;
+}
+
+.button-container {
+    width: 50%;
+    justify-content: center;
+    gap: 5px;
+    display: flex;
+}
+
+/* Estilos de entrada de texto */
+.input-title {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #333;
+    border-right: none;
+    border-radius: 25px 0 0 25px;
+    font-family: "Merriweather", serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#listaNomes {
+    display: none;
+}
+
+.load-lista {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: 2px solid #000;
+    border-radius: 1.2rem;
+    font-size: 1.2rem;
+    text-align: center;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.load-lista:hover {
+    background-color: var(--blue-secondary);
+    color: #fff !important;
+}
+
+.load-lista .lista {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.load-lista .icon {
+    font-size: 2rem;
+    color: #000;
+    margin-right: 0.5rem;
+}
+
+/* Estilos de botão */
+button {
+    padding: 15px 30px;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    border: 2px solid #000;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.button-add {
+    background-color: var(--blue-secondary);
+    color: #fff;
+    border-radius: 0 1.2rem 1.2rem 0;
+}
+
+.button-add:hover {
+    background-color: var(--color-primary);
+}
+
+.button-remove {
+    background-color: var(--color-tertiary);
+    color: #fff;
+    border-radius: 0 25px 25px 0;
+}
+
+.btn-delete {
+    background-color: var(--color-tertiary);
+    color: #fff;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background-color: var(--color-tertiary-hover);
+}
+
+/* Listas */
+ul {
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    list-style-type: none;
+    color: var(--color-text);
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    margin: 20px 0;
+    gap: 5px;
+}
+
+.result-list {
+    margin-top: 15px;
+    color: #05df05;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Botão de sortear título */
+.button-draw {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 40px;
+    color: var(--color-white);
+    background-color: var(--color-button);
+    font-size: 16px;
+    justify-content: center;
+}
+
+.button-draw span {
+    margin-right: 0.5rem;
+}
+
+.button-draw:hover {
+    background-color: var(--color-button-hover);
+}
+
+#listaAmigos li {
+    border-radius: 10px;
+    border: 2px solid #000;
+    padding: 6px 10px;
+    font-size: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#listaAmigos li:hover {
+    background-color: var(--color-text);
+    color: #fff;
+    cursor: pointer;
+}
+
+.patrocinadores {
+    display: flex;
+    width: 80%;
+}
+
+.patrocinadores-lista {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.patrocinadores-lista li {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.patrocinadores-lista li img {
+    width: 100%;
+    border-radius: 10px;
+    border: solid 2px #000;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 2% auto;
+    border: 1px solid #888;
+    width: 98%;
+    height: 90%;
+    border-radius: 10px;
+}
+
+.modal-header {
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px 10px 0 0;
+}
+
+/* The Close Button */
+.close {
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    margin-right: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #275b6c;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.close:hover,
+.close:focus {
+    color: var(--color-tertiary);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-body {
+    width: 100%;
+    height: 85vh;
+}
+
+#telaSorteio {
+    position: relative;
+    height: 100%;
+    /*background: linear-gradient(135deg, #111, #222);*/
+    transition: background-color 0.6s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+}
+
+#contador {
+    position: absolute;
+    font-size: 14rem;
+    font-weight: bold;
+    animation: pulse 1s infinite;
+}
+
+#patrocinador {
+    position: absolute;
+    max-width: 400px;
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none;
+}
+
+.logo-animada {
+    animation: zoomLogo 1.2s ease forwards;
+}
+
+#resultado {
+    font-size: 5rem;
+    margin-top: 20px;
+
+    animation: move;
+    animation-duration: 2s;
+    animation-iteration-count: 7;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomLogo {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.3);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.6);
+    }
+}
+
+@keyframes move {
+  from {
+    transform: translateX(-300px);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
