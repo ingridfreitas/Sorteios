@@ -1,4 +1,5 @@
 let amigos = [];
+let ultimoSorteado = null;
 const inputFile = document.querySelector('#listaNomes');
 const resultadoEl = document.getElementById("resultado");
 const fundo = document.getElementById("telaSorteio")
@@ -204,6 +205,9 @@ function sortearAmigo() {
     if (amigos.length > 0) {
         let index = parseInt(Math.random() * amigos.length);
         let amigoSecreto = amigos[index];
+
+        ultimoSorteado = amigoSecreto;
+
         confeteDoCliff();
 
         contadorEl.textContent = "";
@@ -215,9 +219,25 @@ function sortearAmigo() {
 }
 
 function novoSorteio() {
+
+    if (ultimoSorteado) {
+        amigos = amigos.filter(nome => nome !== ultimoSorteado);
+        console.log("IF", ultimoSorteado)
+        ultimoSorteado = null;
+    }
+
+    // limpa apenas o resultado visual
+    resultadoEl.textContent = "";
+    contadorEl.textContent = "";
+
+    // 🔁 reset visual dos patrocinadores
+    patrocinadorEl.style.display = "block";
+    patrocinadorEl.src = "";
+    fundo.style.backgroundColor = "#fff";
+
+    // reexibe a lista atualizada
     limparListas();
-    amigos = [];
-    location.reload()
+    aparecerNomeAmigo();
 }
 
 function confeteDoCliff() {
