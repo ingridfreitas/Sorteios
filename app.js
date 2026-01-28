@@ -1,4 +1,5 @@
 let amigos = [];
+let ids = 1;
 let ultimoSorteado = null;
 const inputFile = document.querySelector('#listaNomes');
 const resultadoEl = document.getElementById("resultado");
@@ -27,7 +28,11 @@ function validarNome() {
         alert("Por favor, digite um nome válido!!");
     }
     else {
-        amigos.push(nome);
+        amigos.push({
+            id: ids++,
+            nome
+        });
+
         limparListas();
         aparecerNomeAmigo();
         limparCampo('nomeAdicionado');
@@ -60,31 +65,29 @@ inputFile.addEventListener("change", function (event) {
 });
 
 function processarCSV(texto) {
-    amigos = [];
-
     const linhas = texto.split("\n");
 
     linhas.forEach((linha) => {
         const nome = linha.trim();
 
         if (nome !== "") {
-            amigos.push(nome);
+            amigos.push({
+                id: ids++,
+                nome
+            });
         }
     });
+    limparListas();
     aparecerNomeAmigo();
 }
 
 function removerNome(id) {
-    var alvo = amigos[id];
-    let nomeAmigo = alvo;
-    if (amigos.includes(nomeAmigo)) {
-        amigos = amigos.filter(amigo => amigo != nomeAmigo);
-        alert(`O amigo ${nomeAmigo} foi excluído com sucesso!`);
+        amigos = amigos.filter(amigo => amigo.id !== id);
         limparCampo(id);
         limparListas();
         aparecerNomeAmigo();
-    }
-    else if (nomeAmigo == '') {
+
+    if (nomeAmigo == '') {
         alert("Nenhum nome selecionado");
         limparCampo('nomeRemovido');
     }
@@ -97,22 +100,20 @@ function aparecerNomeAmigo() {
     let listaAmigos = document.querySelector('#listaAmigos');
     var itemVazio = document.getElementById("listaVazia");
 
-    if (amigos.length > 0) {
-        itemVazio.style.display = "none";
-    }
-
-    else {
+    if (amigos.length === 0) {
         itemVazio.style.display = "block";
         return
     }
 
-    amigos.forEach((nome, index) => {
+    itemVazio.style.display = "none";
+
+    amigos.forEach((amigo) => {
         const li = document.createElement("li");
-        li.id = `${index}`
+        li.id = `${amigo.id}`
         li.innerHTML = `
-            ${nome}
+            ${amigo.nome}
             <span class="material-symbols-outlined btn-delete"
-                  onclick="removerNome(${index})">
+                  onclick="removerNome(${amigo.id})">
                 delete
             </span>
         `;
@@ -226,24 +227,19 @@ function novoSorteio() {
         ultimoSorteado = null;
     }
 
-    // limpa apenas o resultado visual
     resultadoEl.textContent = "";
     contadorEl.textContent = "";
 
-    // 🔁 reset visual dos patrocinadores
     patrocinadorEl.style.display = "block";
     patrocinadorEl.src = "";
     fundo.style.backgroundColor = "#fff";
 
-    // reexibe a lista atualizada
     limparListas();
     aparecerNomeAmigo();
 }
 
 function confeteDoCliff() {
-    // variavel que faz o tempo de duração do confete (15 segundos do futuro)
     var end = Date.now() + (15 * 1000);
-    // variavel que seleciona as cores do confete
     var colors = ['#4b69fd', '#ffffff'];
 
     (function frame() {
