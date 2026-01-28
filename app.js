@@ -21,26 +21,31 @@ let indexPatrocinador = 0;
 
 function validarNome() {
     let nome = document.querySelector('#nomeAdicionado').value;
-    if (amigos.includes(nome)) {
-        alert(`O nome ${nome} já foi adicionado`);
-    }
-    else if (nome == '') {
-        alert("Por favor, digite um nome válido!!");
-    }
-    else {
-        amigos.push({
-            id: ids++,
-            nome
-        });
 
-        limparListas();
-        aparecerNomeAmigo();
-        limparCampo('nomeAdicionado');
+    if (nome == '') {
+        alert("Por favor, digite um nome válido!!");
+        return
     }
+
+    const existente = amigos.some(amigo => amigo.nome === nome);
+
+    if (existente) {
+        alert(`O nome ${nome} já foi adicionado`);
+        limparCampo('nomeAdicionado');
+        return
+    }
+
+    amigos.push({
+        id: ids++,
+        nome
+    });
+
+    limparListas();
+    aparecerNomeAmigo();
+    limparCampo('nomeAdicionado');
 }
 
 inputFile.addEventListener("change", function (event) {
-    console.log("lista::::")
     const file = event.target.files[0];
     if (!file) return;
 
@@ -82,10 +87,10 @@ function processarCSV(texto) {
 }
 
 function removerNome(id) {
-        amigos = amigos.filter(amigo => amigo.id !== id);
-        limparCampo(id);
-        limparListas();
-        aparecerNomeAmigo();
+    amigos = amigos.filter(amigo => amigo.id !== id);
+    limparCampo(id);
+    limparListas();
+    aparecerNomeAmigo();
 
     if (nomeAmigo == '') {
         alert("Nenhum nome selecionado");
@@ -107,6 +112,7 @@ function aparecerNomeAmigo() {
 
     itemVazio.style.display = "none";
 
+    
     amigos.forEach((amigo) => {
         const li = document.createElement("li");
         li.id = `${amigo.id}`
@@ -132,7 +138,6 @@ function limparListas() {
 
 function limparCampo(campo) {
     nome = document.getElementById(campo);
-    console.log(campo, nome)
     nome.value = '';
 }
 
@@ -161,15 +166,12 @@ function realizarSorteio() {
     tempo = patrocinadores.length;
     indexPatrocinador = 0;
 
-    console.log("Tempo: ", tempo)
-
     proximaEtapa()
 }
 
 
 function proximaEtapa() {
     if (tempo === 0) {
-        console.log("tempo = 0")
         sortearAmigo();
         patrocinadorEl.style.display = "none"
         fundo.style.backgroundColor = "#fff"
@@ -192,8 +194,6 @@ function proximaEtapa() {
         contadorEl.style.color = etapa.fonte;
         contadorEl.textContent = tempo;
         contadorEl.style.display = "block";
-
-        console.log(tempo)
 
         tempo--;
         indexPatrocinador = (indexPatrocinador + 1) % patrocinadores.length;
@@ -223,7 +223,6 @@ function novoSorteio() {
 
     if (ultimoSorteado) {
         amigos = amigos.filter(nome => nome !== ultimoSorteado);
-        console.log("IF", ultimoSorteado)
         ultimoSorteado = null;
     }
 
