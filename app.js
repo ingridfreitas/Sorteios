@@ -1,6 +1,11 @@
 let amigos = [];
 let ids = 1;
 let ultimoSorteado = null;
+
+let confeteAtivo = false;
+let confeteFrameId = null;
+
+
 const inputFile = document.querySelector('#listaNomes');
 const resultadoEl = document.getElementById("resultado");
 const fundo = document.getElementById("telaSorteio")
@@ -149,6 +154,7 @@ function abrirModal() {
     modal.style.display = "block";
 
     span.onclick = function () {
+        pararConfete()
         modal.style.display = "none";
     }
 
@@ -205,7 +211,7 @@ function proximaEtapa() {
 function sortearAmigo() {
     if (amigos.length > 0) {
         let index = parseInt(Math.random() * amigos.length);
-        let amigoSecreto = amigos[index];
+        let amigoSecreto = amigos[index].nome;
 
         ultimoSorteado = amigoSecreto;
 
@@ -220,9 +226,10 @@ function sortearAmigo() {
 }
 
 function novoSorteio() {
+    pararConfete();
 
     if (ultimoSorteado) {
-        amigos = amigos.filter(nome => nome !== ultimoSorteado);
+        amigos = amigos.filter(amigo => amigo.nome !== ultimoSorteado);
         ultimoSorteado = null;
     }
 
@@ -241,7 +248,14 @@ function confeteDoCliff() {
     var end = Date.now() + (15 * 1000);
     var colors = ['#4b69fd', '#ffffff'];
 
+    confeteAtivo = true;
+
     (function frame() {
+        if(!confeteAtivo){
+            cancelAnimationFrame(confeteFrameId);
+            return;
+        }
+
         //confete da esquerda
         confetti({
             particleCount: 2,
@@ -259,8 +273,17 @@ function confeteDoCliff() {
             colors: colors
         });
         // finaliza o processo quando o tempo atual for maior que o definido na variavel end
-        if (Date.now() < end) {
-            requestAnimationFrame(frame);
+        if (Date.now() < end && confeteAtivo) {
+            confeteFrameId = requestAnimationFrame(frame);
         }
     }());
+}
+
+function pararConfete() {
+    confeteAtivo = false;
+
+    if (confeteFrameId) {
+        cancelAnimationFrame(confeteFrameId);
+        confeteFrameId = null;
+    }
 }
