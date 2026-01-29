@@ -58,7 +58,7 @@ No caso de `.csv`, o sistema considera a primeira coluna.
 ### Opção 1: Executar localmente
 1. Clone este repositório:
    ```bash:
-   git clone https://github.com/seu-usuario/seu-repositorio.git
+   git clone https://github.com/ingridfreitas/Sorteios
    ```
 
 2. Abra o arquivo index.html no navegador.
