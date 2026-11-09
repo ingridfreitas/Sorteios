@@ -4,111 +4,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="imagex/png" href="assets/CenterPsy.ico">
+    <link rel="shortcut icon" type="image/png" href="assets/CenterPsy.ico">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=delete,repeat,swap_vertical_circle,upload" />
-    <title>Sorteio</title>
+    <title>Sorteio | CenterPsy Experience</title>
 </head>
 
 <body>
-    <main class="main-content">
-        <header class="header-banner">
-            <img src="assets/CenterPsy.png" alt="Logo do CenterPSY" class="logo">
-            <h1 class="main-title">Sorteio</h1>
-            <h1></h1>
+    <div class="app">
+        <header class="topo">
+            <img src="assets/CenterPsy.png" alt="Logo do CenterPsy Experience" class="logo">
+            <div class="topo-texto">
+                <p class="topo-rotulo">CenterPsy Experience</p>
+                <h1 class="main-title">Sorteio</h1>
+            </div>
         </header>
 
-        <section class="input-section">
-            <h2 class="section-title">Digite o nome dos partipantes</h2>
-            <div class="input-wrapper">
-                <input type="text" id="nomeAdicionado" class="input-name" placeholder="Digite um nome">
-                <button class="button-add" onclick="validarNome()">Adicionar</button>
-            </div>
+        <main class="painel">
+            <!-- Adicionar participantes + ações do sorteio -->
+            <section class="card card-entrada">
+                <h2 class="card-titulo">
+                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                    Adicionar participantes
+                </h2>
 
-            <div class="input-wrapper">
+                <div class="campo-linha">
+                    <input type="text" id="nomeAdicionado" class="input-name" placeholder="Digite um nome e tecle Enter"
+                        autocomplete="off" maxlength="80">
+                    <button type="button" class="button-add" id="btnAdicionar">Adicionar</button>
+                </div>
+
                 <label for="listaNomes" class="load-lista">
-                    <span class="lista"> <span class="material-symbols-outlined icon">upload</span>Carregar Lista de
-                        Nomes (.txt /.csv)</span>
-                    <input type="file" id="listaNomes" accept=".txt, .csv">
+                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16" /></svg>
+                    <span>Carregar lista de nomes (.txt / .csv)</span>
+                    <input type="file" id="listaNomes" accept=".txt,.csv">
                 </label>
-            </div>
+                <p class="dica">Um nome por linha. Nomes repetidos são ignorados.</p>
 
-            <h2 class="section-title subtitle">Partipantes:</h2>
-            <div class="input-wrapper listaParticipantes">
-                <ul id="listaAmigos" class="name-list" aria-labelledby="listaAmigos" role="list">
+                <div class="sorteio-config">
+                    <label for="premio" class="rotulo">Prêmio desta rodada <span>(opcional)</span></label>
+                    <input type="text" id="premio" class="input-name" placeholder="Ex.: Kit Casa Moretto" autocomplete="off"
+                        maxlength="80">
+
+                    <div class="button-container">
+                        <button type="button" class="button-draw" id="btnSortear" aria-label="Realizar sorteio">
+                            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5l14 8.5-14 8.5z" /></svg>
+                            Realizar sorteio
+                        </button>
+                        <button type="button" class="button-sec" id="btnDesfazer">
+                            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 010 11H11" /></svg>
+                            Desfazer último vencedor
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lista de participantes -->
+            <section class="card card-lista">
+                <div class="card-cabecalho">
+                    <h2 class="card-titulo">
+                        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20v-1.5a4 4 0 00-4-4H7a4 4 0 00-4 4V20" /><circle cx="9.5" cy="7.5" r="3.5" /><path d="M21 20v-1.5a4 4 0 00-3-3.9M15.5 4.1a3.5 3.5 0 010 6.8" /></svg>
+                        Participantes <span class="contagem" id="contagem">0</span>
+                    </h2>
+                    <button type="button" class="link-btn" id="btnLimpar">Limpar lista</button>
+                </div>
+                <ul id="listaAmigos" class="name-list" role="list">
                     <li id="listaVazia" class="vazio">Nenhum participante adicionado ainda!</li>
                 </ul>
-            </div>
+            </section>
 
+            <!-- Vencedores -->
+            <section class="card card-vencedores">
+                <h2 class="card-titulo">
+                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3" /></svg>
+                    Vencedores <span class="contagem" id="contagemVencedores">0</span>
+                </h2>
+                <ol id="listaVencedores" class="vencedores-lista">
+                    <li id="vencedoresVazio" class="vazio">Os vencedores aparecem aqui.</li>
+                </ol>
+            </section>
+        </main>
 
-            <div class="button-container">
-                <button class="button-draw" onclick="abrirModal()" aria-label="Sortear amigo secreto">
-                    <span class="material-symbols-outlined">
-                        swap_vertical_circle
-                    </span>
-                    Realizar Sorteio
-                </button>
-                <button class="button-draw" onclick="novoSorteio()" aria-label="Sortear amigo secreto">
-                    <span class="material-symbols-outlined">
-                        repeat
-                    </span>
-                    Novo Sorteio
-                </button>
-            </div>
+        <footer class="rodape">
+            <p class="rodape-titulo">Patrocinadores</p>
+            <ul class="patrocinadores-lista">
+                <li><img src="assets/patrocinio/fire-command.png" alt="Fire Command"></li>
+                <li><img src="assets/casamoretto.png" alt="Casa Moretto"></li>
+                <li><img src="assets/centerpsyclin.png" alt="Clínica CENTERPSY"></li>
+                <li><img src="assets/patmos.jpg" alt="Assessoria Patmos"></li>
+                <li><img src="assets/paulotransportes.png" alt="Paulo Transportes"></li>
+                <li><img src="assets/visiosho.png" alt="Visio DHO"></li>
+                <li><img src="assets/zag.jpg" alt="Zag Modas"></li>
+            </ul>
+        </footer>
+    </div>
 
-            <h2 class="section-title subtitle">Patrocinadores:</h2>
-            <div class="patrocinadores">
-                <ul class="patrocinadores-lista">
-                    <li class="patrocinador">
-                        <img src="assets/casamoretto.png" alt="Casa Moretto">
-                    </li>
-                    <li class="patrocinador">
-                        <img src="assets/centerpsyclin.png" alt="Clínica CENTERPSY">
-                    </li>
-                    <li class="patrocinador">
-                        <img src="assets/patmos.jpg" alt="Assessoria Patmos">
-                    </li>
-                    <li class="patrocinador">
-                        <img src="assets/paulotransportes.png" alt="Paulo Transportes">
-                    </li>
-                    <li class="patrocinador">
-                        <img src="assets/visiosho.png" alt="Visio DHO">
-                    </li>
-                    <li class="patrocinador">
-                        <img src="assets/zag.jpg" alt="Zag Modas">
-                    </li>
-                </ul>
-            </div>
+    <div id="avisos" class="avisos" aria-live="polite"></div>
 
-            <div id="modal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1></h1>
-                        <h1></h1>
-                        <span class="close">&times;</span>
-                    </div>
-                    <div class="modal-body">
-                        <div id="telaSorteio">
-                            <img id="patrocinador" src="" alt="Patrocinador" />
+    <!-- Tela do sorteio (modal em tela cheia) -->
+    <div id="modal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <button type="button" class="close" id="fecharModal" aria-label="Fechar sorteio">&times;</button>
 
-                            <div id="contador"></div>
+            <div id="telaSorteio" class="tela-sorteio">
+                <div class="fundo-evento" aria-hidden="true">
+                    <span class="feixe f1"></span>
+                    <span class="feixe f2"></span>
+                    <span class="feixe f3"></span>
+                </div>
+                <div class="fundo-brilho"></div>
 
-                            <h1 id="resultado"></h1>
+                <!-- Transição: cena do patrocinador oficial + contagem -->
+                <div class="palco" id="palco">
+                    <img class="evento-logo" src="assets/CenterPsy.png" alt="CenterPsy Experience">
+
+                    <figure class="arte-wrap" id="arteWrap">
+                        <span class="arte-onda"></span>
+                        <span class="arte-flash"></span>
+
+                        <svg class="anel-texto" viewBox="-500 -500 1000 1000" aria-hidden="true">
+                            <defs>
+                                <path id="trilhaTexto" d="M 0,-428 A 428,428 0 1 1 -0.01,-428" />
+                            </defs>
+                            <g class="anel-giro">
+                                <text>
+                                    <textPath href="#trilhaTexto" textLength="2688" lengthAdjust="spacing">PATROCINADOR OFICIAL • PATROCINADOR OFICIAL •&#160;</textPath>
+                                </text>
+                            </g>
+                        </svg>
+
+                        <div class="disco">
+                            <img id="patrocinador" src="" alt="">
+                            <span class="arte-brilho"></span>
                         </div>
+
+                        <div class="pilula"><span id="pilulaTexto"></span></div>
+                    </figure>
+
+                    <div class="contador-wrap" id="contadorWrap" aria-live="polite">
+                        <svg class="contador-anel" viewBox="0 0 120 120" aria-hidden="true">
+                            <circle class="trilha" cx="60" cy="60" r="54"></circle>
+                            <circle class="progresso" cx="60" cy="60" r="54"></circle>
+                        </svg>
+                        <span id="contador"></span>
                     </div>
                 </div>
 
+                <!-- Resultado -->
+                <div class="resultado-wrap" id="resultadoWrap">
+                    <div class="raios"></div>
+                    <img class="resultado-logo" src="assets/CenterPsy.png" alt="CenterPsy Experience">
+                    <p class="resultado-rotulo">Parabéns!</p>
+                    <h1 id="resultado"></h1>
+                    <span class="resultado-linha"></span>
+                    <p class="resultado-premio" id="resultadoPremio"></p>
+                </div>
             </div>
+        </div>
+    </div>
 
-        </section>
-    </main>
-
-    <script src="app.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.1"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
+    <!-- Confete: usa a cópia local (vendor/) e, se ela não existir, tenta a CDN -->
+    <script src="vendor/confetti.browser.min.js"></script>
+    <script>window.confetti || document.write('<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.1"><\/script>');</script>
+    <script src="app.js"></script>
 </body>
 
 </html>

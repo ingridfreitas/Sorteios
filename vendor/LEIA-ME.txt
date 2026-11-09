@@ -1,0 +1,7 @@
+Para o site funcionar 100% sem internet no dia do evento:
+
+1. Abra https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.1 no navegador
+2. Salve o conteúdo como  confetti.browser.min.js  dentro desta pasta (vendor)
+
+Se o arquivo não estiver aqui, o site tenta baixar o confete da internet automaticamente.
+(Sem confete o sorteio continua funcionando normalmente.)
