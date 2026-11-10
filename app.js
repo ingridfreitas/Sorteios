@@ -6,6 +6,8 @@ let vencedores = [];  // { nome, premio }
 let ids = 1;
 
 let premioRodada = "";
+let filaPatrocinadores = []; // "baralho" de patrocinadores que ainda não apareceram neste ciclo
+let rodadaAtual = null;      // grupo de patrocinadores planejado para o sorteio em andamento
 let confeteAtivo = false;
 let confeteFrameId = null;
 
@@ -45,7 +47,7 @@ const ICONE_LIXO = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><pat
    ===================================================== */
 function salvar() {
     try {
-        localStorage.setItem(CHAVE_SALVA, JSON.stringify({ amigos, vencedores, ids }));
+        localStorage.setItem(CHAVE_SALVA, JSON.stringify({ amigos, vencedores, ids, fila: filaPatrocinadores }));
     } catch { }
 }
 
@@ -58,6 +60,7 @@ function carregar() {
         amigos = (dados.amigos || []).filter(nomeValido).map((a) => ({ id: Number(a.id) || 0, nome: a.nome }));
         vencedores = (dados.vencedores || []).filter(nomeValido).map((v) => ({ nome: v.nome, premio: String(v.premio || "") }));
         ids = Math.max(Number(dados.ids) || 1, ...amigos.map((a) => a.id + 1), 1);
+        filaPatrocinadores = Array.isArray(dados.fila) ? dados.fila.filter((n) => typeof n === "string") : [];
     } catch { }
 }
 
@@ -174,18 +177,64 @@ inputFile.addEventListener("change", (event) => {
     const reader = new FileReader();
     reader.onload = (e) => {
         const buffer = e.target.result;
-        let texto;
 
-        try {
-            // tenta UTF-8 "estrito" primeiro; se houver bytes inválidos (Excel em ANSI), cai para Windows-1252
-            texto = new TextDecoder("utf-8", { fatal: true }).decode(buffer);
-        } catch {
-            texto = new TextDecoder("windows-1252").decode(buffer);
+        // Verifica se é uma planilha do Excel
+        if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+            try {
+                const data = new Uint8Array(buffer);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+
+                // Converte a planilha em objetos JSON usando a primeira linha como cabeçalho
+                const rows = XLSX.utils.sheet_to_json(worksheet);
+
+                let novos = 0;
+                let ignoradosCheckin = 0;
+                let repetidos = 0;
+
+                rows.forEach((row) => {
+                    const nomeStr = row.Nome || row.nome || row.NOME;
+                    const statusCheckin = String(row["Check-in"] || row["check-in"] || row["CHECK-IN"] || '').trim().toLowerCase();
+                    if (nomeStr) {
+                        if (statusCheckin === 'sim' || statusCheckin === 's' || statusCheckin === 'true') {
+                            const status = adicionarNome(String(nomeStr));
+                            if (status === "ok") novos++;
+                            else if (status === "duplicado") repetidos++;
+                        } else {
+                            ignoradosCheckin++; // Contira quem não fez check-in
+                        }
+                    }
+                });
+
+                atualizarTela();
+
+                // Mensagem de feedback detalhada para você saber o que aconteceu
+                if (novos === 0) {
+                    aviso("Nenhum convidado com check-in 'Sim' foi encontrado na planilha.", "erro");
+                } else {
+                    let msg = `${novos} ${novos === 1 ? "convidado importado" : "convidados importados"} (com check-in)`;
+                    if (repetidos) msg += ` • ${repetidos} repetido(s) ignorado(s)`;
+                    if (ignoradosCheckin) msg += ` • ${ignoradosCheckin} sem check-in ignorado(s)`;
+                    aviso(msg + ".");
+                }
+            } catch (err) {
+                aviso("Erro ao ler o arquivo Excel.", "erro");
+            }
+        } else {
+            // Comportamento padrão para arquivos .txt ou .csv simples
+            let texto;
+            try {
+                texto = new TextDecoder("utf-8", { fatal: true }).decode(buffer);
+            } catch {
+                texto = new TextDecoder("windows-1252").decode(buffer);
+            }
+
+            texto = texto.replace(/^\uFEFF/, "").replace(/\r/g, "");
+            processarCSV(texto);
         }
 
-        texto = texto.replace(/^\uFEFF/, "").replace(/\r/g, "");
-        processarCSV(texto);
-        inputFile.value = ""; // permite escolher o mesmo arquivo de novo
+        inputFile.value = ""; // Permite escolher o mesmo arquivo de novo se necessário
     };
     reader.onerror = () => aviso("Não foi possível ler o arquivo.", "erro");
     reader.readAsArrayBuffer(file);
@@ -307,14 +356,24 @@ btnDesfazer.addEventListener("click", () => {
 /* =====================================================
    Sorteio: cena dos patrocinadores oficiais
    ===================================================== */
-// Cada etapa é uma "cena" no formato da arte oficial (logo em círculo, anel
-// "Patrocinador oficial" e @ do perfil). Para incluir outro patrocinador,
-// basta adicionar uma linha aqui: a contagem regressiva se ajusta sozinha.
-const ETAPAS = [
+// Cada patrocinador é uma "cena" no formato da arte oficial (logo em círculo, anel
+// "Patrocinador oficial" e @ do perfil). Para incluir outro patrocinador, basta
+// adicionar uma linha aqui: o sorteio dos grupos e a contagem se ajustam sozinhos.
+const PATROCINADORES = [
     { disco: "assets/patrocinio/fire-command.png", nome: "Fire Command", handle: "@firecommand_br" },
     { disco: "assets/patrocinio/casa-moretto.png", nome: "Casa Moretto", handle: "@casamoretto_sm" },
-    { disco: "assets/patrocinio/paulo-transportes.png", nome: "Paulo Transportes", handle: "@paulotransportesm" }
+    { disco: "assets/patrocinio/paulo-transportes.png", nome: "Paulo Transportes", handle: "@paulotransportesm" },
+    { disco: "assets/patrocinio/gislene-giorgette.png", nome: "Gislene Giorgette", handle: "@gislene_cerimonialista" },
+    { disco: "assets/patrocinio/zag.png", nome: "Zag Modas", handle: "@zagmodass" },
+    { disco: "assets/patrocinio/alemao-pneus.png", nome: "Alemão Pneus", handle: "@alemaopneussbotucatu" },
+    { disco: "assets/patrocinio/logistic-trans.png", nome: "Logistic Trans", handle: "@logistictrans.botucatu" },
+    { disco: "assets/patrocinio/ingrid-heloise.png", nome: "Ingrid Heloise Software Solutions", handle: "@iindyheloiise2" }
 ];
+
+// Quantos patrocinadores aparecem em cada sorteio. Eles são embaralhados e sorteados
+// em "baralho": todos aparecem uma vez antes de qualquer um repetir.
+// (Com 8 patrocinadores e grupos de 4, todos aparecem a cada 2 sorteios.)
+const PATROCINADORES_POR_RODADA = 4;
 
 // Tempos da transição (ms) - ajuste aqui se o cliente quiser mais rápido/lento
 const TEMPO = {
@@ -330,6 +389,37 @@ const reduzMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").mat
 let sorteioId = 0;
 
 const espera = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function embaralhar(lista) {
+    const a = lista.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+// Monta o grupo de patrocinadores do próximo sorteio sem "gastar" o baralho:
+// ele só é consumido quando o vencedor aparece (ver sortearAmigo).
+function planejarRodada() {
+    const tamanho = Math.min(PATROCINADORES_POR_RODADA, PATROCINADORES.length);
+    const nomesValidos = PATROCINADORES.map((p) => p.nome);
+    let fila = filaPatrocinadores.filter((nome) => nomesValidos.includes(nome));
+    const grupo = [];
+
+    while (grupo.length < tamanho) {
+        if (fila.length === 0) {
+            // baralho acabou: embaralha todos de novo (sem repetir quem já está neste grupo)
+            fila = embaralhar(nomesValidos.filter((nome) => !grupo.includes(nome)));
+        }
+        grupo.push(fila.shift());
+    }
+
+    return {
+        grupo: embaralhar(grupo).map((nome) => PATROCINADORES.find((p) => p.nome === nome)),
+        fila
+    };
+}
 
 function abrirModal() {
     if (amigos.length === 0) {
@@ -380,8 +470,8 @@ function resetarTela() {
     resultadoPremioEl.textContent = "";
 }
 
-function preCarregarArtes() {
-    return Promise.all(ETAPAS.map((etapa) => {
+function preCarregarArtes(lista) {
+    return Promise.all(lista.map((etapa) => {
         const img = new Image();
         img.src = etapa.disco;
         return img.decode().catch(() => { });
@@ -391,11 +481,14 @@ function preCarregarArtes() {
 async function realizarSorteio() {
     const id = ++sorteioId;
 
-    await preCarregarArtes();
+    rodadaAtual = planejarRodada();
+    const grupo = rodadaAtual.grupo;
+
+    await preCarregarArtes(grupo);
     if (id !== sorteioId) return;
 
-    for (let i = 0; i < ETAPAS.length; i++) {
-        const continuar = await mostrarEtapa(ETAPAS[i], ETAPAS.length - i, id);
+    for (let i = 0; i < grupo.length; i++) {
+        const continuar = await mostrarEtapa(grupo[i], grupo.length - i, id);
         if (!continuar) return;
     }
 
@@ -410,7 +503,8 @@ async function mostrarEtapa(etapa, numero, id) {
 
     arteEl.src = etapa.disco;
     arteEl.alt = `${etapa.nome} - Patrocinador oficial`;
-    pilulaTextoEl.textContent = etapa.handle;
+    pilulaTextoEl.textContent = etapa.handle || "";
+    arteWrapEl.classList.toggle("sem-handle", !etapa.handle);
     try { await arteEl.decode(); } catch { }
     if (!vivo()) return false;
 
@@ -470,6 +564,9 @@ function sortearAmigo() {
     const index = Math.floor(Math.random() * amigos.length);
     const [vencedor] = amigos.splice(index, 1); // quem ganha sai da lista e passa para "Vencedores"
     vencedores.push({ nome: vencedor.nome, premio: premioRodada });
+
+    // a rodada foi concluída: os patrocinadores exibidos saem do baralho
+    if (rodadaAtual) filaPatrocinadores = rodadaAtual.fila;
 
     inputPremio.value = "";
     atualizarTela();
@@ -555,3 +652,4 @@ function pararConfete() {
    ===================================================== */
 carregar();
 atualizarTela();
+preCarregarArtes(PATROCINADORES); // deixa as artes em cache para a transição começar sem atraso

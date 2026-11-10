@@ -103,15 +103,9 @@ input:focus-visible,
     align-items: start;
 }
 
-.card-entrada {
-    grid-area: entrada;
-}
-.card-lista {
-    grid-area: lista;
-}
-.card-vencedores {
-    grid-area: vencedores;
-}
+.card-entrada { grid-area: entrada; }
+.card-lista { grid-area: lista; }
+.card-vencedores { grid-area: vencedores; }
 
 .card {
     padding: 1.5rem;
@@ -165,9 +159,7 @@ input:focus-visible,
     background: rgba(255, 255, 255, 0.06);
     border: 1.5px solid var(--borda);
     border-radius: 0.9rem;
-    transition:
-        border-color 0.2s,
-        box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .input-name::placeholder {
@@ -214,9 +206,7 @@ input:focus-visible,
     border: 1.5px dashed rgba(255, 255, 255, 0.28);
     border-radius: 0.9rem;
     cursor: pointer;
-    transition:
-        border-color 0.2s,
-        background 0.2s;
+    transition: border-color 0.2s, background 0.2s;
 }
 
 .load-lista:hover {
@@ -269,9 +259,7 @@ input:focus-visible,
     border: none;
     border-radius: 1.1rem;
     box-shadow: 0 0.8rem 2rem rgba(249, 74, 26, 0.35);
-    transition:
-        transform 0.15s,
-        box-shadow 0.2s;
+    transition: transform 0.15s, box-shadow 0.2s;
 }
 
 .button-draw .ico {
@@ -434,7 +422,7 @@ input:focus-visible,
 
 /* Rodapé / patrocinadores */
 .rodape {
-    margin-top: auto;
+    margin-top: 1rem;
     padding-top: 0.6rem;
     display: flex;
     flex-direction: column;
@@ -459,13 +447,20 @@ input:focus-visible,
 }
 
 .patrocinadores-lista img {
-    width: 5rem;
-    height: 5rem;
+    width: 3.6rem;
+    height: 3.6rem;
     display: block;
     object-fit: cover;
     background: #fff;
     border: 1px solid var(--borda);
     border-radius: 0.9rem;
+}
+
+/* Logos recortadas em círculo ficam redondas também no rodapé */
+.patrocinadores-lista img[src*="patrocinio/"] {
+    background: transparent;
+    border: none;
+    border-radius: 50%;
 }
 
 /* Avisos (no lugar dos alert) */
@@ -513,21 +508,12 @@ input:focus-visible,
 }
 
 @keyframes avisoEntra {
-    from {
-        opacity: 0;
-        transform: translateY(1rem);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(1rem); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes avisoSai {
-    to {
-        opacity: 0;
-        transform: translateY(1rem);
-    }
+    to { opacity: 0; transform: translateY(1rem); }
 }
 
 @media (max-width: 900px) {
@@ -559,7 +545,6 @@ input:focus-visible,
 /* =====================================================
    Tela de sorteio (modal em tela cheia) - identidade do evento
    ===================================================== */
-
 .modal {
     display: none;
     position: fixed;
@@ -598,10 +583,7 @@ input:focus-visible,
     border-radius: 50%;
     backdrop-filter: blur(6px);
     opacity: 0.5;
-    transition:
-        background 0.2s,
-        opacity 0.2s,
-        transform 0.3s;
+    transition: background 0.2s, opacity 0.2s, transform 0.3s;
 }
 
 .close:hover,
@@ -637,34 +619,20 @@ input:focus-visible,
     top: -30%;
     width: 22vmax;
     height: 160%;
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        rgba(110, 160, 255, 0.2) 40%,
-        rgba(110, 160, 255, 0.07) 72%,
-        transparent
-    );
+    background: linear-gradient(to bottom, transparent, rgba(110, 160, 255, 0.2) 40%, rgba(110, 160, 255, 0.07) 72%, transparent);
     filter: blur(22px);
     transform-origin: 50% 0;
     animation: feixe 15s ease-in-out infinite alternate;
 }
 
-.feixe.f1 {
-    left: 6%;
-}
+.feixe.f1 { left: 6%; }
 
 .feixe.f2 {
     --a1: -22deg;
     --a2: -10deg;
     left: 46%;
     width: 16vmax;
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        rgba(249, 74, 26, 0.17) 40%,
-        rgba(249, 74, 26, 0.05) 72%,
-        transparent
-    );
+    background: linear-gradient(to bottom, transparent, rgba(249, 74, 26, 0.17) 40%, rgba(249, 74, 26, 0.05) 72%, transparent);
     animation-duration: 19s;
 }
 
@@ -696,9 +664,7 @@ input:focus-visible,
     display: flex;
     justify-content: center;
     align-items: center;
-    transition:
-        opacity 0.6s ease,
-        transform 0.8s ease;
+    transition: opacity 0.6s ease, transform 0.8s ease;
 }
 
 .tela-sorteio.revelando .palco {
@@ -769,16 +735,20 @@ input:focus-visible,
 }
 
 .anel-giro {
-    animation: giro 70s infinite linear;
+    animation: giro 70s linear infinite;
 }
 
 .pilula {
     position: absolute;
     left: 50%;
-    bottom: -1%;
+    bottom: 0%;
     z-index: 2;
-    width: 58%;
+    min-width: 58%;
+    max-width: 94%;
+    width: max-content;
     height: 9%;
+    padding: 0 3%;
+    white-space: nowrap;
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
@@ -791,6 +761,10 @@ input:focus-visible,
     border-radius: 0.5vmin;
     box-shadow: 0 1vmin 3vmin rgba(0, 0, 0, 0.45);
     opacity: 0;
+}
+
+.arte-wrap.sem-handle .pilula {
+    display: none;
 }
 
 /* Ondas laranjas e clarão no momento da entrada */
@@ -897,11 +871,7 @@ input:focus-visible,
     justify-content: center;
     align-items: center;
     opacity: 0;
-    transition:
-        width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
-        height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
-        margin 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
-        opacity 0.5s ease;
+    transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), margin 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
 }
 
 .palco.contando .contador-wrap {
@@ -1028,9 +998,7 @@ input:focus-visible,
     font-weight: 900;
     line-height: 1.15;
     color: #fff;
-    text-shadow:
-        0 0 0.3em rgba(249, 74, 26, 0.65),
-        0 0.05em 0.12em rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 0.3em rgba(249, 74, 26, 0.65), 0 0.05em 0.12em rgba(0, 0, 0, 0.5);
 }
 
 #resultado .palavra {
@@ -1118,202 +1086,95 @@ input:focus-visible,
 
 /* ---------- Animações ---------- */
 @keyframes modalEntra {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes respira {
-    from {
-        opacity: 0.7;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0.7; }
+    to { opacity: 1; }
 }
 
 @keyframes feixe {
-    from {
-        transform: rotate(var(--a1)) translateX(-4vw);
-    }
-    to {
-        transform: rotate(var(--a2)) translateX(5vw);
-    }
+    from { transform: rotate(var(--a1)) translateX(-4vw); }
+    to { transform: rotate(var(--a2)) translateX(5vw); }
 }
 
 @keyframes aparece {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes discoEntra {
-    0% {
-        opacity: 0;
-        transform: scale(0.35);
-        filter: brightness(2.6) blur(8px);
-    }
-    55% {
-        opacity: 1;
-        transform: scale(1.07);
-        filter: brightness(1.3) blur(0);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-        filter: brightness(1) blur(0);
-    }
+    0% { opacity: 0; transform: scale(0.35); filter: brightness(2.6) blur(8px); }
+    55% { opacity: 1; transform: scale(1.07); filter: brightness(1.3) blur(0); }
+    100% { opacity: 1; transform: scale(1); filter: brightness(1) blur(0); }
 }
 
 @keyframes anelEntra {
-    0% {
-        opacity: 0;
-        transform: rotate(-110deg) scale(0.8);
-    }
-    40% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 1;
-        transform: rotate(0) scale(1);
-    }
+    0% { opacity: 0; transform: rotate(-110deg) scale(0.8); }
+    40% { opacity: 1; }
+    100% { opacity: 1; transform: rotate(0) scale(1); }
 }
 
 @keyframes pilulaEntra {
-    0% {
-        opacity: 0;
-        transform: translateX(-50%) translateY(35%);
-        clip-path: inset(0 50% 0 50%);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-        clip-path: inset(0 0 0 0);
-    }
+    0% { opacity: 0; transform: translateX(-50%) translateY(35%); clip-path: inset(0 50% 0 50%); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0); clip-path: inset(0 0 0 0); }
 }
 
 @keyframes onda {
-    0% {
-        opacity: 0.95;
-        transform: translate(-50%, -50%) scale(0.4);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(2.2);
-    }
+    0% { opacity: 0.95; transform: translate(-50%, -50%) scale(0.4); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(2.2); }
 }
 
 @keyframes ondaFina {
-    0% {
-        opacity: 0.8;
-    }
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 0.8; }
+    100% { opacity: 0; }
 }
 
 @keyframes flash {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.2);
-    }
-    25% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1.3);
-    }
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+    25% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); }
 }
 
 @keyframes varre {
-    from {
-        left: -60%;
-    }
-    to {
-        left: 140%;
-    }
+    from { left: -60%; }
+    to { left: 140%; }
 }
 
 @keyframes arteSai {
-    0% {
-        opacity: 1;
-        transform: scale(1);
-        filter: blur(0);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(1.14);
-        filter: blur(10px);
-    }
+    0% { opacity: 1; transform: scale(1); filter: blur(0); }
+    100% { opacity: 0; transform: scale(1.14); filter: blur(10px); }
 }
 
 @keyframes esvazia {
-    from {
-        stroke-dashoffset: 0;
-    }
-    to {
-        stroke-dashoffset: 339.3;
-    }
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: 339.3; }
 }
 
 @keyframes numeroPop {
-    0% {
-        opacity: 0;
-        transform: scale(0.3);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+    0% { opacity: 0; transform: scale(0.3); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
 @keyframes giro {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
 }
 
 @keyframes subir {
-    from {
-        opacity: 0;
-        transform: translateY(2.5vmin);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(2.5vmin); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes letraEntra {
-    from {
-        opacity: 0;
-        transform: translateY(45%) scale(0.8);
-        filter: blur(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0);
-    }
+    from { opacity: 0; transform: translateY(45%) scale(0.8); filter: blur(12px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
 @keyframes linha {
-    from {
-        width: 0;
-    }
-    to {
-        width: min(60vw, 70rem);
-    }
+    from { width: 0; }
+    to { width: min(60vw, 70rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {

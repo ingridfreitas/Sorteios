@@ -23,7 +23,9 @@
             <!-- Adicionar participantes + ações do sorteio -->
             <section class="card card-entrada">
                 <h2 class="card-titulo">
-                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
                     Adicionar participantes
                 </h2>
 
@@ -34,24 +36,31 @@
                 </div>
 
                 <label for="listaNomes" class="load-lista">
-                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16" /></svg>
-                    <span>Carregar lista de nomes (.txt / .csv)</span>
-                    <input type="file" id="listaNomes" accept=".txt,.csv">
+                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 16V4M7 9l5-5 5 5M4 20h16" />
+                    </svg>
+                    <span>Carregar lista de nomes (.xlsx, .csv, .txt)</span>
+                    <input type="file" id="listaNomes" accept=".xlsx,.xls,.csv,.txt">
                 </label>
                 <p class="dica">Um nome por linha. Nomes repetidos são ignorados.</p>
 
                 <div class="sorteio-config">
                     <label for="premio" class="rotulo">Prêmio desta rodada <span>(opcional)</span></label>
-                    <input type="text" id="premio" class="input-name" placeholder="Ex.: Kit Casa Moretto" autocomplete="off"
-                        maxlength="80">
+                    <input type="text" id="premio" class="input-name" placeholder="Ex.: Kit Casa Moretto"
+                        autocomplete="off" maxlength="80">
 
                     <div class="button-container">
                         <button type="button" class="button-draw" id="btnSortear" aria-label="Realizar sorteio">
-                            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5l14 8.5-14 8.5z" /></svg>
+                            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M6 3.5l14 8.5-14 8.5z" />
+                            </svg>
                             Realizar sorteio
                         </button>
                         <button type="button" class="button-sec" id="btnDesfazer">
-                            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 010 11H11" /></svg>
+                            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M9 14L4 9l5-5" />
+                                <path d="M4 9h10.5a5.5 5.5 0 010 11H11" />
+                            </svg>
                             Desfazer último vencedor
                         </button>
                     </div>
@@ -62,7 +71,11 @@
             <section class="card card-lista">
                 <div class="card-cabecalho">
                     <h2 class="card-titulo">
-                        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20v-1.5a4 4 0 00-4-4H7a4 4 0 00-4 4V20" /><circle cx="9.5" cy="7.5" r="3.5" /><path d="M21 20v-1.5a4 4 0 00-3-3.9M15.5 4.1a3.5 3.5 0 010 6.8" /></svg>
+                        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M16 20v-1.5a4 4 0 00-4-4H7a4 4 0 00-4 4V20" />
+                            <circle cx="9.5" cy="7.5" r="3.5" />
+                            <path d="M21 20v-1.5a4 4 0 00-3-3.9M15.5 4.1a3.5 3.5 0 010 6.8" />
+                        </svg>
                         Participantes <span class="contagem" id="contagem">0</span>
                     </h2>
                     <button type="button" class="link-btn" id="btnLimpar">Limpar lista</button>
@@ -75,7 +88,9 @@
             <!-- Vencedores -->
             <section class="card card-vencedores">
                 <h2 class="card-titulo">
-                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3" /></svg>
+                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3" />
+                    </svg>
                     Vencedores <span class="contagem" id="contagemVencedores">0</span>
                 </h2>
                 <ol id="listaVencedores" class="vencedores-lista">
@@ -88,12 +103,13 @@
             <p class="rodape-titulo">Patrocinadores</p>
             <ul class="patrocinadores-lista">
                 <li><img src="assets/patrocinio/fire-command.png" alt="Fire Command"></li>
-                <li><img src="assets/casamoretto.png" alt="Casa Moretto"></li>
-                <li><img src="assets/centerpsyclin.png" alt="Clínica CENTERPSY"></li>
-                <li><img src="assets/patmos.jpg" alt="Assessoria Patmos"></li>
-                <li><img src="assets/paulotransportes.png" alt="Paulo Transportes"></li>
-                <li><img src="assets/visiosho.png" alt="Visio DHO"></li>
-                <li><img src="assets/zag.jpg" alt="Zag Modas"></li>
+                <li><img src="assets/patrocinio/casa-moretto.png" alt="Casa Moretto"></li>
+                <li><img src="assets/patrocinio/paulo-transportes.png" alt="Paulo Transportes"></li>
+                <li><img src="assets/patrocinio/zag.png" alt="Zag Modas"></li>
+                <li><img src="assets/patrocinio/gislene-giorgette.png" alt="Gislene Giorgette"></li>
+                <li><img src="assets/patrocinio/alemao-pneus.png" alt="Alemão Pneus"></li>
+                <li><img src="assets/patrocinio/logistic-trans.png" alt="Logistic Trans"></li>
+                <li><img src="assets/patrocinio/ingrid-heloise.png" alt="Ingrid Heloise Software Solutions"></li>
             </ul>
         </footer>
     </div>
@@ -127,7 +143,8 @@
                             </defs>
                             <g class="anel-giro">
                                 <text>
-                                    <textPath href="#trilhaTexto" textLength="2688" lengthAdjust="spacing">PATROCINADOR OFICIAL • PATROCINADOR OFICIAL •&#160;</textPath>
+                                    <textPath href="#trilhaTexto" textLength="2688" lengthAdjust="spacing">PATROCINADOR
+                                        OFICIAL • PATROCINADOR OFICIAL •&#160;</textPath>
                                 </text>
                             </g>
                         </svg>
@@ -164,6 +181,8 @@
 
     <!-- Confete: usa a cópia local (vendor/) e, se ela não existir, tenta a CDN -->
     <script src="vendor/confetti.browser.min.js"></script>
+    <!-- Adicione esta linha no <head> ou antes do seu app.js se já não houver -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>window.confetti || document.write('<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.1"><\/script>');</script>
     <script src="app.js"></script>
 </body>
