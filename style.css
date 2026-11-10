@@ -222,7 +222,7 @@ input:focus-visible,
 }
 
 .sorteio-config {
-    margin-top: 1.6rem;
+    margin-top: 1rem;
     padding-top: 1.4rem;
     border-top: 1px solid var(--borda);
 }
@@ -231,6 +231,10 @@ input:focus-visible,
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
+}
+
+.space {
+    margin-top: 1rem;
 }
 
 .rotulo span {
@@ -422,14 +426,14 @@ input:focus-visible,
 
 /* Rodapé / patrocinadores */
 .rodape {
-    margin-top: 1rem;
+    margin-top: auto;
     padding-top: 0.6rem;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 1.2rem;
+    gap: 2rem;
 }
 
 .rodape-titulo {
@@ -443,12 +447,12 @@ input:focus-visible,
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.7rem;
+    gap: 0.9rem;
 }
 
 .patrocinadores-lista img {
-    width: 3.6rem;
-    height: 3.6rem;
+    width: 5rem;
+    height: 5rem;
     display: block;
     object-fit: cover;
     background: #fff;

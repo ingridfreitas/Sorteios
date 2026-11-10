@@ -18,6 +18,7 @@ const $ = (id) => document.getElementById(id);
 const inputNome = $("nomeAdicionado");
 const inputFile = $("listaNomes");
 const inputPremio = $("premio");
+const inputQtdePatrocinadores = $("qtdePatrocinadores");
 const listaEl = $("listaAmigos");
 const listaVaziaEl = $("listaVazia");
 const contagemEl = $("contagem");
@@ -367,13 +368,46 @@ const PATROCINADORES = [
     { disco: "assets/patrocinio/zag.png", nome: "Zag Modas", handle: "@zagmodass" },
     { disco: "assets/patrocinio/alemao-pneus.png", nome: "Alemão Pneus", handle: "@alemaopneussbotucatu" },
     { disco: "assets/patrocinio/logistic-trans.png", nome: "Logistic Trans", handle: "@logistictrans.botucatu" },
-    { disco: "assets/patrocinio/ingrid-heloise.png", nome: "Ingrid Heloise Software Solutions", handle: "@iindyheloiise2" }
+    { disco: "assets/patrocinio/ingrid-heloise.png", nome: "Ingrid Heloise Software Solutions", handle: "@iindyheloiise2" },
+    { disco: "assets/patrocinio/patmos.png", nome: "Patmos", handle: "@patmos.assessoria" },
+    { disco: "assets/patrocinio/ytallo-santos.png", nome: "Ytallo Santos", handle: "@ytallo_santos.ofc" }
 ];
 
 // Quantos patrocinadores aparecem em cada sorteio. Eles são embaralhados e sorteados
 // em "baralho": todos aparecem uma vez antes de qualquer um repetir.
 // (Com 8 patrocinadores e grupos de 4, todos aparecem a cada 2 sorteios.)
-const PATROCINADORES_POR_RODADA = 4;
+// 1. Define o valor inicial como 5 ou o que já estiver no input
+let PATROCINADORES_POR_RODADA = 5;
+
+if (inputQtdePatrocinadores) {
+    // Se o input já tiver algum valor válido ao carregar, usa ele. Senão, define 5.
+    const valorInicial = parseInt(inputQtdePatrocinadores.value);
+    if (!isNaN(valorInicial)) {
+        PATROCINADORES_POR_RODADA = Math.max(1, Math.min(PATROCINADORES.length, valorInicial));
+    }
+    inputQtdePatrocinadores.value = PATROCINADORES_POR_RODADA; // Garante que o input mostra o valor correto
+}
+
+// 2. Escuta a digitação do usuário
+inputQtdePatrocinadores?.addEventListener("input", () => {
+    const valorTexto = inputQtdePatrocinadores.value.trim();
+
+    // Se o usuário apagou tudo (campo vazio), permitimos temporariamente para ele poder digitar outro
+    if (valorTexto === "") {
+        return;
+    }
+
+    const valor = parseInt(valorTexto);
+
+    // Valida se é um número válido dentro dos limites
+    if (isNaN(valor) || valor < 1 || valor > PATROCINADORES.length) {
+        aviso(`Digite um número entre 1 e ${PATROCINADORES.length}.`, "erro");
+        return;
+    }
+
+    // Atualiza a variável global/local com o novo valor digitado
+    PATROCINADORES_POR_RODADA = valor;
+});
 
 // Tempos da transição (ms) - ajuste aqui se o cliente quiser mais rápido/lento
 const TEMPO = {
